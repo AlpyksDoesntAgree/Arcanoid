@@ -4,17 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Game : MonoBehaviour
-{
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
-
 public static class ApiRequests
 {
-    private static string apiUrl = "http://localhost:5039/api/";
+    private static string apiUrl = "http://localhost:5039/api/UsersLogins";
 
     public static void GetUsers(Action<string> callback)
     {
@@ -61,6 +53,4 @@ public static class ApiRequests
             }
         }
     }*/
-}
-
 }

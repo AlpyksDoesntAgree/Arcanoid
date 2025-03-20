@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class ButtonControl : MonoBehaviour
@@ -8,8 +9,11 @@ public class ButtonControl : MonoBehaviour
     private PlayerMove player;
     [SerializeField] private Animator LevelPanelAnimator;
     [SerializeField] private Animator SettingsAnimator;
+    [SerializeField] private Text _currentAcc;
     private void Start()
     {
+        string curAcc = PlayerPrefs.GetString("UserName");
+        _currentAcc.text = $"Current account: {curAcc}"; 
         if(GameObject.FindGameObjectWithTag("Player"))
             player = GameObject.Find("Player").GetComponent<PlayerMove>();
         LevelPanelAnimator.enabled = false;
