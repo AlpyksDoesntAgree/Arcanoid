@@ -162,3 +162,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballIsActive: 0
+  skins:
+  - {fileID: 21300000, guid: 30f23fb3cad42ab4689d5c2f62ca7c83, type: 3}
+  - {fileID: 21300000, guid: 97df9dee35d70a24ab7dcc3ac989703d, type: 3}
+  - {fileID: 21300000, guid: a85071a37394f3e439510dcc0f4df34f, type: 3}
+  - {fileID: 21300000, guid: 597a3298121b21d4284df4d695d320c9, type: 3}

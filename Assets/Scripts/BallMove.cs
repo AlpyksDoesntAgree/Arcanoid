@@ -12,12 +12,19 @@ public class BallMove : MonoBehaviour
     private Vector3 ballPosition;
     private Rigidbody2D rb;
     private Vector3 StartJumpDirection;
+    [SerializeField] private Sprite[] skins;
+    private SpriteRenderer _playerSkin;
+    private int curSkin;
 
     private bool IsSpeeded = false;
     void Start()
     {
+        curSkin = PlayerPrefs.GetInt("SelectedSkin");
+        Debug.Log(curSkin);
         _player = GameObject.Find("Player");
         rb = GetComponent<Rigidbody2D>();
+        _playerSkin = GetComponent<SpriteRenderer>();
+        _playerSkin.sprite = skins[curSkin];
 
         int ballLayer = LayerMask.NameToLayer("Balls");
         Physics2D.IgnoreLayerCollision(ballLayer, ballLayer, true);

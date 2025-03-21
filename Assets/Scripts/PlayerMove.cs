@@ -1,5 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
+using System.Text;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -20,8 +22,15 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private Transform _leftPoint;
     [SerializeField] private Transform _rightPoint;
+    private bool _coinsAdded = false;
+    private int _userID;
+    private int _userCoins;
 
-
+    private void Awake()
+    {
+        _userID = PlayerPrefs.GetInt("id");
+        _userCoins = PlayerPrefs.GetInt("Coins");
+    }
     void Start()
     {
         _winAnim.enabled = false;
@@ -72,6 +81,12 @@ public class PlayerMove : MonoBehaviour
                 rb.velocity = Vector3.zero;
             }
             _winAnim.enabled = true;
+
+            if (!_coinsAdded)
+            {
+                StartCoroutine(AddCoins(_userID, 50));
+                _coinsAdded = true;
+            }
         }
     }
 
@@ -109,5 +124,30 @@ public class PlayerMove : MonoBehaviour
     {
         _player.gameObject.transform.localScale = new Vector3(0.85f, 0.85f, 1);
         IsSized = false;
+    }
+
+    IEnumerator AddCoins(int userId, int amount)
+    {
+        string url = $"http://localhost:5039/api/UsersLogins/{userId}/add-coins";
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(amount.ToString());
+
+        using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
+        {
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("succsess!");
+                PlayerPrefs.SetInt("Coins", _userCoins + amount);
+            }
+            else
+            {
+                Debug.LogError($"error: {www.error}");
+            }
+        }
     }
 }
