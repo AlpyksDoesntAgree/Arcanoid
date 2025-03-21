@@ -19,12 +19,7 @@ public class ShopController : MonoBehaviour
         _coinsText.text = _usersCoins.ToString();
     }
 
-    void Update()
-    {
-
-    }
-
-    public void Buying(int price)
+    public void Buying(int price, int skinId)
     {
         if (_usersCoins >= price)
         {
@@ -32,6 +27,7 @@ public class ShopController : MonoBehaviour
             _usersCoins -= price;
             PlayerPrefs.SetInt("Coins", _usersCoins);
             _coinsText.text = _usersCoins.ToString();
+            StartCoroutine(BuySkin(user_id, skinId));
         }
     }
 
@@ -58,11 +54,11 @@ public class ShopController : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("Монеты добавлены!");
+                Debug.Log("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
             }
             else
             {
-                Debug.LogError($"Ошибка: {www.error}");
+                Debug.LogError($"пїЅпїЅпїЅпїЅпїЅпїЅ: {www.error}");
             }
         }
     }
@@ -82,13 +78,42 @@ public class ShopController : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("Монеты добавлены!");
+                Debug.Log("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
             }
             else
             {
-                Debug.LogError($"Ошибка: {www.error}");
+                Debug.LogError($"пїЅпїЅпїЅпїЅпїЅпїЅ: {www.error}");
             }
         }
+    }
+
+    IEnumerator BuySkin(int userId, int skinId)
+    {
+        string url = $"http://localhost:5039/api/UsersLogins/{userId}/buy-skin/{skinId}";
+        using (UnityWebRequest www = UnityWebRequest.PostWwwForm(url, ""))
+        {
+            www.downloadHandler = new DownloadHandlerBuffer();
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = www.downloadHandler.text;
+                BuySkinResponse response = JsonUtility.FromJson<BuySkinResponse>(jsonResponse);
+
+                Debug.Log(response.message);
+            }
+            else
+            {
+                Debug.LogError($"пїЅпїЅпїЅпїЅпїЅпїЅ: {www.error}");
+            }
+        }
+    }
+
+    [System.Serializable]
+    public class BuySkinResponse
+    {
+        public bool status;
+        public string message;
     }
 }
 
